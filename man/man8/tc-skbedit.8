@@ -12,7 +12,8 @@ skbedit - SKB editing action
 .BI mark " MARK\fR[\fB/\fIMASK] ] ["
 .B ptype
 .IR PTYPE " ] ["
-.BR inheritdsfield " ]"
+.BR inheritdsfield " ] ["
+.BR edemux " ]"
 .SH DESCRIPTION
 The
 .B skbedit
@@ -69,6 +70,10 @@ Override the packet classification decision, and any value specified with
 .BR priority ", "
 using the information stored in the Differentiated Services Field of the
 IPv6/IPv4 header (RFC2474).
+.TP
+.BI edemux
+Enable early demux for established TCP sockets and connected UDP sockets.  Similar to the
+{ip,tcp,udp}_early_demux sysctl knobs, but in the TC layer.
 .SH SEE ALSO
 .BR tc (8),
 .BR tc-pedit (8)

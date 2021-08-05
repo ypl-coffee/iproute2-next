@@ -29,6 +29,7 @@
 #define SKBEDIT_F_PTYPE			0x8
 #define SKBEDIT_F_MASK			0x10
 #define SKBEDIT_F_INHERITDSFIELD	0x20
+#define SKBEDIT_F_EDEMUX		0x40
 
 struct tc_skbedit {
 	tc_gen;

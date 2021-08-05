@@ -30,19 +30,21 @@
 
 static void explain(void)
 {
-	fprintf(stderr, "Usage: ... skbedit <[QM] [PM] [MM] [PT] [IF]>\n"
+	fprintf(stderr, "Usage: ... skbedit <[QM] [PM] [MM] [PT] [IF] [ED]>\n"
 		"QM = queue_mapping QUEUE_MAPPING\n"
 		"PM = priority PRIORITY\n"
 		"MM = mark MARK[/MASK]\n"
 		"PT = ptype PACKETYPE\n"
 		"IF = inheritdsfield\n"
+		"ED = edemux\n"
 		"PACKETYPE = is one of:\n"
 		"  host, otherhost, broadcast, multicast\n"
 		"QUEUE_MAPPING = device transmit queue to use\n"
 		"PRIORITY = classID to assign to priority field\n"
 		"MARK = firewall mark to set\n"
 		"MASK = mask applied to firewall mark (0xffffffff by default)\n"
-		"note: inheritdsfield maps DS field to skb->priority\n");
+		"note: inheritdsfield maps DS field to skb->priority\n"
+		"      edemux (early demux) tries to find skb->sk, if not already found\n");
 }
 
 static void
@@ -131,6 +133,9 @@ parse_skbedit(struct action_util *a, int *argc_p, char ***argv_p, int tca_id,
 			ok++;
 		} else if (matches(*argv, "inheritdsfield") == 0) {
 			pure_flags |= SKBEDIT_F_INHERITDSFIELD;
+			ok++;
+		} else if (matches(*argv, "edemux") == 0) {
+			pure_flags |= SKBEDIT_F_EDEMUX;
 			ok++;
 		} else if (matches(*argv, "help") == 0) {
 			usage();
@@ -249,6 +254,8 @@ static int print_skbedit(struct action_util *au, FILE *f, struct rtattr *arg)
 		if (flags & SKBEDIT_F_INHERITDSFIELD)
 			print_null(PRINT_ANY, "inheritdsfield", " %s",
 				     "inheritdsfield");
+		if (flags & SKBEDIT_F_EDEMUX)
+			print_null(PRINT_ANY, "edemux", " %s", "edemux");
 	}
 
 	print_action_control(f, " ", p->action, "");
